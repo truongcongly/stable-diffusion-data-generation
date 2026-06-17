@@ -1,0 +1,12 @@
+diffusers
+transformers
+accelerate
+safetensors
+datasets
+pillow
+opencv-python
+scikit-learn
+matplotlib
+seaborn
+tqdm
+gradio

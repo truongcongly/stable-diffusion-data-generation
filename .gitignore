@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.cache/
+
+data/raw/
+data/processed/
+data/synthetic/
+models/*.pth
+results/*.png
+results/*.txt
+
+.env
+.DS_Store
