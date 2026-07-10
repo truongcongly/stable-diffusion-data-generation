@@ -13,6 +13,7 @@ results/*.png
 results/*.txt
 results/*.csv
 results/*.json
+results/prompt_analysis/
 
 .env
 .DS_Store

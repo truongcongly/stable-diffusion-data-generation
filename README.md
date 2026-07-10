@@ -551,6 +551,62 @@ Suggested demo flow:
 5. Open the Model Results tab and explain the metrics/confusion matrix.
 ```
 
+## Stage 9: NLP Prompt Analysis
+
+This stage adds a lightweight natural language processing analysis for the prompts used to generate synthetic images.
+
+Run:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
+```
+
+Inputs:
+
+```text
+data\metadata\synthetic_prompts.csv
+results\predictions.csv
+```
+
+Outputs:
+
+```text
+results\prompt_analysis\prompt_analysis.csv
+results\prompt_analysis\prompt_analysis_report.txt
+results\prompt_analysis\prompt_analysis_summary.json
+results\prompt_analysis\prompt_keyword_frequency.png
+results\prompt_analysis\prompt_length_distribution.png
+results\prompt_analysis\confidence_by_prompt_id.png
+```
+
+The analysis extracts simple NLP features:
+
+```text
+prompt word count
+prompt keyword count
+top prompt keywords
+keyword frequency
+prompt length distribution
+average classifier confidence by prompt ID
+```
+
+This stage connects the text prompts to the generated images and model predictions. It helps answer questions such as:
+
+```text
+Which words appear most often in the generated image prompts?
+Are some prompt types easier for the classifier to detect as synthetic?
+How long are the prompts used to generate the synthetic dataset?
+```
+
+Only synthetic images that appear in the test split can be matched with rows from `results\predictions.csv`. The remaining generated images are still included in keyword and prompt-length analysis.
+
+Suggested demo explanation:
+
+```text
+This project also includes a simple NLP analysis of the text prompts used to generate synthetic images. The goal is to connect language prompts with image generation and classifier behavior.
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images
