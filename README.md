@@ -607,6 +607,61 @@ Suggested demo explanation:
 This project also includes a simple NLP analysis of the text prompts used to generate synthetic images. The goal is to connect language prompts with image generation and classifier behavior.
 ```
 
+## Stage 10: External Image Prediction
+
+This stage predicts real vs synthetic for images outside the training workflow. It is useful for a practical demo because you can test images manually selected from other folders.
+
+Predict one image:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png
+```
+
+Example output:
+
+```text
+data/processed/test/synthetic/synthetic_0014.png -> synthetic (99.99%)
+```
+
+Predict all images in a folder:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\processed\test\real
+```
+
+Save predictions to CSV:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\processed\test\synthetic --output-csv results\external_predictions.csv
+```
+
+If CUDA/cuDNN has a temporary memory issue during live demo, force CPU prediction:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+```
+
+For a more realistic external test, create folders such as:
+
+```text
+data\external_test\real
+data\external_test\synthetic
+```
+
+Then run:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\external_test\real --output-csv results\external_real_predictions.csv
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\external_test\synthetic --output-csv results\external_synthetic_predictions.csv
+```
+
+Suggested demo explanation:
+
+```text
+Besides the fixed test set, the project can classify external images using the trained model. This makes the demo closer to a real-world use case.
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images
