@@ -11,6 +11,8 @@ data/metadata/*.txt
 models/*.pth
 results/*.png
 results/*.txt
+results/*.csv
+results/*.json
 
 .env
 .DS_Store

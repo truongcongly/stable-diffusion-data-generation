@@ -370,6 +370,73 @@ To change split ratios:
 D:\project\.venv\Scripts\python.exe src\prepare_dataset.py --train-ratio 0.8 --val-ratio 0.1
 ```
 
+## Stage 6: Classifier Training
+
+This stage trains the downstream computer vision model. Stable Diffusion is not trained in this project; it is only used to generate synthetic images. The trained model is a ResNet18 classifier for `real` vs `synthetic` face images.
+
+Run:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 5 --batch-size 16
+```
+
+Input:
+
+```text
+data\processed\train
+data\processed\val
+```
+
+Outputs:
+
+```text
+models\resnet18_real_vs_synthetic.pth
+models\resnet18_real_vs_synthetic_final.pth
+results\training_history.csv
+results\training_config.json
+```
+
+The best model checkpoint is saved based on validation accuracy:
+
+```text
+models\resnet18_real_vs_synthetic.pth
+```
+
+The final checkpoint after the last epoch is saved as:
+
+```text
+models\resnet18_real_vs_synthetic_final.pth
+```
+
+The training history contains:
+
+```text
+epoch
+train_loss
+train_accuracy
+val_loss
+val_accuracy
+```
+
+For a quick test run:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 1 --batch-size 16
+```
+
+Optional: use ImageNet pretrained ResNet18 weights:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 5 --batch-size 16 --pretrained
+```
+
+Suggested demo explanation:
+
+```text
+In this stage, the generated synthetic images and real images are used to train a ResNet18 classifier. The model learns to classify each input face image as real or synthetic.
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images
