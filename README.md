@@ -140,6 +140,50 @@ CUDA available: True
 GPU: NVIDIA GeForce RTX 4060
 ```
 
+## Stage 2: Environment Verification
+
+After installing Python, PyTorch, and the project dependencies, run the full environment check:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\check_environment.py
+```
+
+This checks:
+
+- Python version
+- Required Python packages
+- PyTorch CUDA support
+- GPU name and VRAM
+- Project folders
+- Number of real and synthetic images
+- Trained model and evaluation outputs
+
+Expected important lines:
+
+```text
+Python: 3.11.x [OK]
+torch: ... [OK]
+CUDA available: True
+GPU: NVIDIA GeForce RTX 4060 Laptop GPU
+```
+
+If `CUDA available` is `False`, check these items:
+
+- Make sure the NVIDIA GPU driver is installed.
+- Restart the computer after installing or updating the driver.
+- Make sure PyTorch was installed with the CUDA 12.1 wheel:
+
+```cmd
+D:\project\.venv\Scripts\python.exe -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+- Run the check from a normal Command Prompt, not only from the IDE terminal:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\check_environment.py
+```
+
 ## Generate One Test Image
 
 ```cmd
