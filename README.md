@@ -437,6 +437,63 @@ Suggested demo explanation:
 In this stage, the generated synthetic images and real images are used to train a ResNet18 classifier. The model learns to classify each input face image as real or synthetic.
 ```
 
+## Stage 7: Model Evaluation
+
+This stage evaluates the trained classifier on the test split.
+
+Run:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\evaluate_model.py
+```
+
+Input:
+
+```text
+data\processed\test
+models\resnet18_real_vs_synthetic.pth
+```
+
+Outputs:
+
+```text
+results\classification_report.txt
+results\classification_report.json
+results\metrics_summary.json
+results\predictions.csv
+results\confusion_matrix.png
+results\confusion_matrix_normalized.png
+```
+
+The report includes:
+
+```text
+accuracy
+precision
+recall
+F1-score
+support
+```
+
+The predictions CSV contains one row per test image:
+
+```text
+image_path
+true_label
+predicted_label
+confidence
+correct
+```
+
+This file is useful for error analysis and for future prompt/NLP analysis. For example, synthetic image predictions can later be connected back to the prompt metadata from Stage 3.
+
+Suggested demo explanation:
+
+```text
+In this stage, the trained classifier is evaluated on unseen test images. The project reports standard classification metrics and a confusion matrix to show how well the model distinguishes real and synthetic face images.
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images
