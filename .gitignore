@@ -7,6 +7,7 @@ data/raw/
 data/processed/
 data/synthetic/
 data/metadata/*.csv
+data/metadata/*.txt
 models/*.pth
 results/*.png
 results/*.txt

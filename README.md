@@ -310,6 +310,66 @@ data\raw\real
 
 Then continue with dataset preparation.
 
+## Stage 5: Dataset Preparation
+
+This stage converts the raw real/synthetic image folders into a machine learning dataset with train, validation, and test splits.
+
+Run:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\prepare_dataset.py
+```
+
+Input folders:
+
+```text
+data\raw\real
+data\raw\synthetic
+```
+
+Output folders:
+
+```text
+data\processed\train\real
+data\processed\train\synthetic
+data\processed\val\real
+data\processed\val\synthetic
+data\processed\test\real
+data\processed\test\synthetic
+```
+
+The script also saves:
+
+```text
+data\metadata\dataset_split_manifest.csv
+data\metadata\dataset_summary.txt
+```
+
+The manifest records each image path, label, and split. The summary records how many real and synthetic images are used in each split.
+
+By default, the script balances the dataset to the smaller class count. For example, if there are 200 real images and 345 synthetic images, it uses 200 images from each class. This avoids training a biased classifier.
+
+Default split ratios:
+
+```text
+train: 70%
+validation: 15%
+test: 15%
+```
+
+To use all available images without class balancing:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\prepare_dataset.py --no-balance
+```
+
+To change split ratios:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\prepare_dataset.py --train-ratio 0.8 --val-ratio 0.1
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images
