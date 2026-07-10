@@ -2,6 +2,21 @@
 
 This project uses Stable Diffusion to generate synthetic face images for a computer vision task: detecting whether a face image is real or AI-generated.
 
+## Portfolio Highlights
+
+- End-to-end synthetic data generation pipeline with Stable Diffusion.
+- Real vs synthetic face image classifier using ResNet18.
+- Evaluation with accuracy, precision, recall, F1-score, confusion matrix, and per-image confidence.
+- NLP prompt analysis for generated synthetic image prompts.
+- External image prediction workflow.
+- Grad-CAM explainability for model predictions.
+- Interactive Gradio demo app.
+
+Project documents:
+
+- [Project Report](docs/report.md)
+- [Demo Checklist](docs/demo_checklist.md)
+
 ## Project Overview
 
 The main idea is to use a pretrained text-to-image diffusion model as a data generation tool. Stable Diffusion generates synthetic face images from text prompts. These generated images are then combined with real face images to create a labeled dataset for training an image classifier.
@@ -697,6 +712,53 @@ Suggested demo explanation:
 
 ```text
 Grad-CAM helps explain the classifier decision by visualizing which image regions contributed most to the real/synthetic prediction. This makes the model behavior easier to inspect instead of only showing a label and confidence score.
+```
+
+## Stage 12: Final Report and Portfolio Documentation
+
+This stage prepares the project for submission, presentation, or portfolio use.
+
+Main documents:
+
+```text
+docs\report.md
+docs\demo_checklist.md
+```
+
+The report covers:
+
+```text
+introduction
+problem statement
+project scope
+pipeline
+dataset
+model training
+evaluation
+NLP prompt analysis
+Grad-CAM explainability
+demo application
+limitations
+future work
+```
+
+Before submission, run:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\check_environment.py
+D:\project\.venv\Scripts\python.exe src\evaluate_model.py
+D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+```
+
+Recommended screenshots for presentation:
+
+```text
+Gradio app prediction screen
+confusion matrix
+prompt keyword frequency chart
+Grad-CAM overlay image
+dataset summary
 ```
 
 ## Full Demo Pipeline
