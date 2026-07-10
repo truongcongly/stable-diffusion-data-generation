@@ -198,6 +198,118 @@ Output:
 data\raw\synthetic\test_face.png
 ```
 
+## Stage 3: Synthetic Image Generation
+
+This stage creates synthetic face images with Stable Diffusion and records generation metadata for later analysis.
+
+Run a small generation test first:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 5
+```
+
+The script saves images to:
+
+```text
+data\raw\synthetic
+```
+
+It also saves metadata to:
+
+```text
+data\metadata\synthetic_prompts.csv
+```
+
+The metadata file contains:
+
+```text
+image_path
+label
+prompt_id
+prompt
+negative_prompt
+seed
+width
+height
+steps
+guidance_scale
+model_id
+```
+
+This metadata is important for the next NLP stage because it connects each generated image with the text prompt that created it.
+
+To generate the final synthetic dataset:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 200
+```
+
+By default, the script uses the next available image index. This avoids overwriting existing files such as `synthetic_0001.png`.
+
+If you intentionally want to start from a specific index:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 20 --start-index 1 --overwrite
+```
+
+## Stage 4: Real Image Dataset Collection
+
+This stage prepares the real face image class. The current workflow uses the LFW dataset through `scikit-learn`.
+
+Run a small test first:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 5
+```
+
+The script saves images to:
+
+```text
+data\raw\real
+```
+
+It also saves metadata to:
+
+```text
+data\metadata\real_lfw.csv
+```
+
+The metadata file contains:
+
+```text
+image_path
+label
+source_dataset
+lfw_index
+person_name
+width
+height
+```
+
+To create a real image dataset balanced with 200 synthetic images:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 200
+```
+
+By default, the script uses the next available image index. This avoids overwriting existing files such as `real_0001.jpg`.
+
+If you intentionally want to start from a specific index:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 200 --start-index 1 --overwrite
+```
+
+If the LFW download fails because of network access, manually place real face images in:
+
+```text
+data\raw\real
+```
+
+Then continue with dataset preparation.
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images

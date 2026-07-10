@@ -6,6 +6,7 @@ __pycache__/
 data/raw/
 data/processed/
 data/synthetic/
+data/metadata/*.csv
 models/*.pth
 results/*.png
 results/*.txt
