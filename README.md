@@ -662,6 +662,43 @@ Suggested demo explanation:
 Besides the fixed test set, the project can classify external images using the trained model. This makes the demo closer to a real-world use case.
 ```
 
+## Stage 11: Grad-CAM Explainability
+
+This stage adds explainable AI visualization with Grad-CAM. Grad-CAM highlights the image regions that most influenced the classifier prediction.
+
+Generate Grad-CAM for a synthetic test image:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png
+```
+
+Generate Grad-CAM for a real test image:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\real\real_0007.jpg
+```
+
+Outputs:
+
+```text
+results\gradcam\<image_name>_heatmap.png
+results\gradcam\<image_name>_overlay.png
+results\gradcam\<image_name>_gradcam.json
+```
+
+If CUDA/cuDNN has a temporary memory issue during live demo, force CPU:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+```
+
+Suggested demo explanation:
+
+```text
+Grad-CAM helps explain the classifier decision by visualizing which image regions contributed most to the real/synthetic prediction. This makes the model behavior easier to inspect instead of only showing a label and confidence score.
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images

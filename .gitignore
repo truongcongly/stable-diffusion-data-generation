@@ -14,6 +14,7 @@ results/*.txt
 results/*.csv
 results/*.json
 results/prompt_analysis/
+results/gradcam/
 
 .env
 .DS_Store
