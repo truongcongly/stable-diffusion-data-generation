@@ -494,6 +494,63 @@ Suggested demo explanation:
 In this stage, the trained classifier is evaluated on unseen test images. The project reports standard classification metrics and a confusion matrix to show how well the model distinguishes real and synthetic face images.
 ```
 
+## Stage 8: Interactive Demo App
+
+This stage runs a Gradio app for live demonstration.
+
+Run:
+
+```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\app.py
+```
+
+Open the local URL printed by Gradio, usually:
+
+```text
+http://127.0.0.1:7860
+```
+
+The app includes:
+
+```text
+Predict Image tab:
+- Upload a face image
+- Show real/synthetic probabilities
+- Show predicted label and confidence
+
+Model Results tab:
+- Show model path and device
+- Show validation/test metrics
+- Show classification report
+- Show confusion matrix
+```
+
+Before running the app, make sure these files exist:
+
+```text
+models\resnet18_real_vs_synthetic.pth
+results\metrics_summary.json
+results\classification_report.txt
+results\confusion_matrix.png
+```
+
+If result files are missing, run:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\evaluate_model.py
+```
+
+Suggested demo flow:
+
+```text
+1. Open the app.
+2. Upload a real image from data\processed\test\real.
+3. Show the predicted label and confidence.
+4. Upload a synthetic image from data\processed\test\synthetic.
+5. Open the Model Results tab and explain the metrics/confusion matrix.
+```
+
 ## Full Demo Pipeline
 
 ### 1. Generate Synthetic Images
