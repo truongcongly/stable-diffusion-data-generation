@@ -1,211 +1,188 @@
-# Stable Diffusion for Synthetic Face Data Generation
+# Stable Diffusion cho sinh dữ liệu ảnh khuôn mặt synthetic
 
-This project uses Stable Diffusion to generate synthetic face images for a computer vision task: detecting whether a face image is real or AI-generated.
+Dự án này sử dụng Stable Diffusion để sinh ảnh khuôn mặt synthetic cho bài toán Computer Vision: phát hiện một ảnh khuôn mặt là ảnh thật hay ảnh do AI sinh ra.
 
-## Portfolio Highlights
+## Điểm nổi bật
 
-- End-to-end synthetic data generation pipeline with Stable Diffusion.
-- Real vs synthetic face image classifier using ResNet18.
-- Evaluation with accuracy, precision, recall, F1-score, confusion matrix, and per-image confidence.
-- NLP prompt analysis for generated synthetic image prompts.
-- External image prediction workflow.
-- Grad-CAM explainability for model predictions.
-- Interactive Gradio demo app.
+- Pipeline sinh dữ liệu synthetic end-to-end bằng Stable Diffusion.
+- Classifier ResNet18 phân loại ảnh `real` và `synthetic`.
+- Evaluation với accuracy, precision, recall, F1-score, confusion matrix và confidence từng ảnh.
+- Phân tích prompt bằng NLP.
+- Dự đoán ảnh ngoài dataset.
+- Giải thích model bằng Grad-CAM.
+- Demo tương tác bằng Gradio.
 
-Project documents:
+Tài liệu:
 
-- [Project Report](docs/report.md)
-- [Demo Checklist](docs/demo_checklist.md)
+- [Báo cáo dự án](docs/report.md)
+- [Checklist demo](docs/demo_checklist.md)
 
-## Project Overview
+## Tổng quan dự án
 
-The main idea is to use a pretrained text-to-image diffusion model as a data generation tool. Stable Diffusion generates synthetic face images from text prompts. These generated images are then combined with real face images to create a labeled dataset for training an image classifier.
+Ý tưởng chính là dùng một mô hình text-to-image pretrained làm công cụ sinh dữ liệu. Stable Diffusion sinh ảnh khuôn mặt synthetic từ prompt văn bản. Các ảnh này được kết hợp với ảnh khuôn mặt thật để tạo dataset có nhãn, sau đó train classifier.
 
 Pipeline:
 
 ```text
-Text prompt
--> Stable Diffusion generates synthetic face images
--> Real and synthetic images are combined into a dataset
--> A ResNet18 classifier is trained
--> The model predicts real vs synthetic/AI-generated faces
--> A Gradio app demonstrates the prediction result
+Prompt văn bản
+-> Stable Diffusion sinh ảnh khuôn mặt synthetic
+-> Kết hợp ảnh real và synthetic thành dataset
+-> Train ResNet18 classifier
+-> Model dự đoán real hoặc synthetic/AI-generated
+-> Demo kết quả bằng Gradio app
 ```
 
-## Problem Statement
+## Bài toán
 
-AI-generated face images are increasingly realistic, which makes it useful to study whether a computer vision model can distinguish real face images from synthetic ones. This project focuses on building an end-to-end synthetic data generation and classification pipeline.
+Ảnh khuôn mặt do AI sinh ra ngày càng chân thực. Vì vậy, dự án tập trung vào việc xây dựng pipeline sinh dữ liệu synthetic và train model phân biệt ảnh thật với ảnh AI.
 
-The classification task is:
+Bài toán classification:
 
 ```text
-Input: a face image
-Output: real or synthetic
+Input: một ảnh khuôn mặt
+Output: real hoặc synthetic
 ```
 
-## Project Scope
+## Phạm vi dự án
 
-This project does not fine-tune Stable Diffusion. Instead, it uses a pretrained Stable Diffusion model from Hugging Face through the `diffusers` library to generate synthetic data.
+Dự án không fine-tune Stable Diffusion. Stable Diffusion chỉ được dùng như mô hình pretrained để sinh dữ liệu ảnh.
 
-The model trained in this project is the downstream classifier:
+Model được train là classifier:
 
 ```text
-Stable Diffusion: used as a pretrained data generator
-ResNet18: trained as the real vs synthetic image classifier
+Stable Diffusion: dùng làm pretrained data generator
+ResNet18: model được train để phân loại real/synthetic
 ```
 
-## Objectives
+## Mục tiêu
 
-- Generate synthetic face images from text prompts.
-- Collect or download real face images.
-- Build a real vs synthetic image dataset.
-- Train a ResNet18 classifier.
-- Evaluate the model with accuracy, precision, recall, F1-score, and a confusion matrix.
-- Provide a Gradio demo app for uploading an image and predicting whether it is real or synthetic.
+- Sinh ảnh khuôn mặt synthetic từ prompt.
+- Thu thập ảnh khuôn mặt thật.
+- Xây dựng dataset real/synthetic.
+- Train ResNet18 classifier.
+- Evaluate bằng accuracy, precision, recall, F1-score và confusion matrix.
+- Demo bằng Gradio app.
+- Thêm NLP prompt analysis.
+- Thêm Grad-CAM explainability.
 
-## Demo Explanation
+## Cách giải thích khi demo
 
-When presenting this project, the key point is:
+Điểm quan trọng:
 
 ```text
-Stable Diffusion is used to generate image data.
-The trained model is the classifier, not Stable Diffusion.
+Stable Diffusion dùng để sinh dữ liệu ảnh.
+Model được train là classifier, không phải Stable Diffusion.
 ```
 
-Suggested explanation:
+Câu giải thích gợi ý:
 
 ```text
-This project uses a pretrained Stable Diffusion model to generate synthetic face images from text prompts. These generated images are combined with real face images to create a dataset. A ResNet18 classifier is then trained to distinguish real images from AI-generated images.
+Dự án dùng Stable Diffusion pretrained để sinh ảnh khuôn mặt synthetic từ prompt văn bản. Sau đó, ảnh synthetic được kết hợp với ảnh real để tạo dataset. Một ResNet18 classifier được train để phân biệt ảnh thật và ảnh AI-generated.
 ```
 
-## Setup
+## Cài đặt
 
-### Requirements Checklist
+### Checklist yêu cầu
 
-Before running the project, make sure these are available:
+Trước khi chạy dự án, cần có:
 
 - Python 3.11
 - Git
 - NVIDIA GPU driver
-- PyTorch with CUDA 12.1
-- Internet connection for the first Stable Diffusion model download and LFW dataset download
-- Visual Studio Code, optional but recommended
+- PyTorch CUDA 12.1
+- Internet cho lần đầu tải model Stable Diffusion và LFW dataset
+- Visual Studio Code, khuyến nghị nhưng không bắt buộc
 
-Check Python:
+Kiểm tra Python:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe --version
 ```
 
-Expected:
+Kết quả mong muốn:
 
 ```text
 Python 3.11.x
 ```
 
-Check PyTorch and CUDA:
+Kiểm tra PyTorch và CUDA:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 ```
 
-Expected:
+Kết quả mong muốn:
 
 ```text
 2.x.x+cu121
 True
 ```
 
-The virtual environment is located in the outer project folder:
+Kích hoạt virtual environment:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 ..\.venv\Scripts\activate
 ```
 
-If activation is confusing, run commands with the virtual environment Python directly:
+Nếu không muốn activate, chạy trực tiếp bằng Python trong `.venv`:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe
 ```
 
-Install PyTorch with CUDA first:
+Cài PyTorch CUDA:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-Then install the rest of the dependencies:
+Cài thư viện còn lại:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## Check GPU
+## Kiểm tra GPU
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_gpu.py
 ```
 
-Expected result:
+Kết quả mong muốn:
 
 ```text
 CUDA available: True
 GPU: NVIDIA GeForce RTX 4060
 ```
 
-## Stage 2: Environment Verification
+## Giai đoạn 2: Kiểm tra môi trường
 
-After installing Python, PyTorch, and the project dependencies, run the full environment check:
+Chạy:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\check_environment.py
 ```
 
-This checks:
+Script này kiểm tra:
 
-- Python version
-- Required Python packages
-- PyTorch CUDA support
-- GPU name and VRAM
-- Project folders
-- Number of real and synthetic images
-- Trained model and evaluation outputs
+- Phiên bản Python
+- Các package cần thiết
+- PyTorch CUDA
+- Tên GPU và VRAM
+- Các thư mục project
+- Số ảnh real/synthetic
+- Model đã train và các output evaluation
 
-Expected important lines:
+Nếu `CUDA available` là `False`, kiểm tra driver NVIDIA, PyTorch CUDA build và thử chạy lại trong Command Prompt thường.
 
-```text
-Python: 3.11.x [OK]
-torch: ... [OK]
-CUDA available: True
-GPU: NVIDIA GeForce RTX 4060 Laptop GPU
-```
-
-If `CUDA available` is `False`, check these items:
-
-- Make sure the NVIDIA GPU driver is installed.
-- Restart the computer after installing or updating the driver.
-- Make sure PyTorch was installed with the CUDA 12.1 wheel:
-
-```cmd
-D:\project\.venv\Scripts\python.exe -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-```
-
-- Run the check from a normal Command Prompt, not only from the IDE terminal:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\check_environment.py
-```
-
-## Generate One Test Image
+## Sinh thử một ảnh
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\generate_one_image.py
 ```
-
-The first run downloads the Stable Diffusion model, so it can take a while.
 
 Output:
 
@@ -213,30 +190,28 @@ Output:
 data\raw\synthetic\test_face.png
 ```
 
-## Stage 3: Synthetic Image Generation
+## Giai đoạn 3: Sinh ảnh synthetic
 
-This stage creates synthetic face images with Stable Diffusion and records generation metadata for later analysis.
-
-Run a small generation test first:
+Chạy test nhỏ:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 5
 ```
 
-The script saves images to:
+Ảnh được lưu tại:
 
 ```text
 data\raw\synthetic
 ```
 
-It also saves metadata to:
+Metadata được lưu tại:
 
 ```text
 data\metadata\synthetic_prompts.csv
 ```
 
-The metadata file contains:
+Metadata gồm:
 
 ```text
 image_path
@@ -252,98 +227,62 @@ guidance_scale
 model_id
 ```
 
-This metadata is important for the next NLP stage because it connects each generated image with the text prompt that created it.
-
-To generate the final synthetic dataset:
+Sinh dataset synthetic chính:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 200
 ```
 
-By default, the script uses the next available image index. This avoids overwriting existing files such as `synthetic_0001.png`.
+## Giai đoạn 4: Thu thập ảnh real
 
-If you intentionally want to start from a specific index:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 20 --start-index 1 --overwrite
-```
-
-## Stage 4: Real Image Dataset Collection
-
-This stage prepares the real face image class. The current workflow uses the LFW dataset through `scikit-learn`.
-
-Run a small test first:
+Chạy test nhỏ:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 5
 ```
 
-The script saves images to:
+Ảnh real được lưu tại:
 
 ```text
 data\raw\real
 ```
 
-It also saves metadata to:
+Metadata được lưu tại:
 
 ```text
 data\metadata\real_lfw.csv
 ```
 
-The metadata file contains:
-
-```text
-image_path
-label
-source_dataset
-lfw_index
-person_name
-width
-height
-```
-
-To create a real image dataset balanced with 200 synthetic images:
+Tạo dataset real 200 ảnh:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 200
 ```
 
-By default, the script uses the next available image index. This avoids overwriting existing files such as `real_0001.jpg`.
-
-If you intentionally want to start from a specific index:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 200 --start-index 1 --overwrite
-```
-
-If the LFW download fails because of network access, manually place real face images in:
+Nếu tải LFW lỗi do mạng, có thể tự đặt ảnh khuôn mặt thật vào:
 
 ```text
 data\raw\real
 ```
 
-Then continue with dataset preparation.
+## Giai đoạn 5: Chuẩn bị dataset
 
-## Stage 5: Dataset Preparation
-
-This stage converts the raw real/synthetic image folders into a machine learning dataset with train, validation, and test splits.
-
-Run:
+Chạy:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\prepare_dataset.py
 ```
 
-Input folders:
+Input:
 
 ```text
 data\raw\real
 data\raw\synthetic
 ```
 
-Output folders:
+Output:
 
 ```text
 data\processed\train\real
@@ -354,18 +293,16 @@ data\processed\test\real
 data\processed\test\synthetic
 ```
 
-The script also saves:
+Script cũng lưu:
 
 ```text
 data\metadata\dataset_split_manifest.csv
 data\metadata\dataset_summary.txt
 ```
 
-The manifest records each image path, label, and split. The summary records how many real and synthetic images are used in each split.
+Mặc định script cân bằng dataset theo class có ít ảnh hơn để tránh model bị lệch class.
 
-By default, the script balances the dataset to the smaller class count. For example, if there are 200 real images and 345 synthetic images, it uses 200 images from each class. This avoids training a biased classifier.
-
-Default split ratios:
+Tỷ lệ split mặc định:
 
 ```text
 train: 70%
@@ -373,23 +310,9 @@ validation: 15%
 test: 15%
 ```
 
-To use all available images without class balancing:
+## Giai đoạn 6: Train classifier
 
-```cmd
-D:\project\.venv\Scripts\python.exe src\prepare_dataset.py --no-balance
-```
-
-To change split ratios:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\prepare_dataset.py --train-ratio 0.8 --val-ratio 0.1
-```
-
-## Stage 6: Classifier Training
-
-This stage trains the downstream computer vision model. Stable Diffusion is not trained in this project; it is only used to generate synthetic images. The trained model is a ResNet18 classifier for `real` vs `synthetic` face images.
-
-Run:
+Chạy:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
@@ -403,7 +326,7 @@ data\processed\train
 data\processed\val
 ```
 
-Outputs:
+Output:
 
 ```text
 models\resnet18_real_vs_synthetic.pth
@@ -412,65 +335,28 @@ results\training_history.csv
 results\training_config.json
 ```
 
-The best model checkpoint is saved based on validation accuracy:
-
-```text
-models\resnet18_real_vs_synthetic.pth
-```
-
-The final checkpoint after the last epoch is saved as:
-
-```text
-models\resnet18_real_vs_synthetic_final.pth
-```
-
-The training history contains:
-
-```text
-epoch
-train_loss
-train_accuracy
-val_loss
-val_accuracy
-```
-
-For a quick test run:
+Chạy test nhanh:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 1 --batch-size 16
 ```
 
-Optional: use ImageNet pretrained ResNet18 weights:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 5 --batch-size 16 --pretrained
-```
-
-Suggested demo explanation:
+Giải thích khi demo:
 
 ```text
-In this stage, the generated synthetic images and real images are used to train a ResNet18 classifier. The model learns to classify each input face image as real or synthetic.
+Ở giai đoạn này, ảnh synthetic và ảnh real được dùng để train ResNet18 classifier. Model học cách phân loại ảnh đầu vào là real hoặc synthetic.
 ```
 
-## Stage 7: Model Evaluation
+## Giai đoạn 7: Evaluation
 
-This stage evaluates the trained classifier on the test split.
-
-Run:
+Chạy:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
 ```
 
-Input:
-
-```text
-data\processed\test
-models\resnet18_real_vs_synthetic.pth
-```
-
-Outputs:
+Output:
 
 ```text
 results\classification_report.txt
@@ -481,7 +367,7 @@ results\confusion_matrix.png
 results\confusion_matrix_normalized.png
 ```
 
-The report includes:
+Các chỉ số:
 
 ```text
 accuracy
@@ -491,100 +377,53 @@ F1-score
 support
 ```
 
-The predictions CSV contains one row per test image:
+## Giai đoạn 8: Gradio demo app
 
-```text
-image_path
-true_label
-predicted_label
-confidence
-correct
-```
-
-This file is useful for error analysis and for future prompt/NLP analysis. For example, synthetic image predictions can later be connected back to the prompt metadata from Stage 3.
-
-Suggested demo explanation:
-
-```text
-In this stage, the trained classifier is evaluated on unseen test images. The project reports standard classification metrics and a confusion matrix to show how well the model distinguishes real and synthetic face images.
-```
-
-## Stage 8: Interactive Demo App
-
-This stage runs a Gradio app for live demonstration.
-
-Run:
+Chạy:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
 
-Open the local URL printed by Gradio, usually:
+Mở URL do Gradio in ra, thường là:
 
 ```text
 http://127.0.0.1:7860
 ```
 
-The app includes:
+App gồm:
 
 ```text
-Predict Image tab:
-- Upload a face image
-- Show real/synthetic probabilities
-- Show predicted label and confidence
+Predict Image:
+- Upload ảnh
+- Hiển thị xác suất real/synthetic
+- Hiển thị nhãn dự đoán và confidence
 
-Model Results tab:
-- Show model path and device
-- Show validation/test metrics
-- Show classification report
-- Show confusion matrix
+Model Results:
+- Hiển thị model path và device
+- Hiển thị metrics
+- Hiển thị classification report
+- Hiển thị confusion matrix
 ```
 
-Before running the app, make sure these files exist:
+## Giai đoạn 9: NLP prompt analysis
 
-```text
-models\resnet18_real_vs_synthetic.pth
-results\metrics_summary.json
-results\classification_report.txt
-results\confusion_matrix.png
-```
-
-If result files are missing, run:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\evaluate_model.py
-```
-
-Suggested demo flow:
-
-```text
-1. Open the app.
-2. Upload a real image from data\processed\test\real.
-3. Show the predicted label and confidence.
-4. Upload a synthetic image from data\processed\test\synthetic.
-5. Open the Model Results tab and explain the metrics/confusion matrix.
-```
-
-## Stage 9: NLP Prompt Analysis
-
-This stage adds a lightweight natural language processing analysis for the prompts used to generate synthetic images.
-
-Run:
+Chạy:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
 ```
 
-Inputs:
+Input:
 
 ```text
 data\metadata\synthetic_prompts.csv
 results\predictions.csv
 ```
 
-Outputs:
+Output:
 
 ```text
 results\prompt_analysis\prompt_analysis.csv
@@ -595,106 +434,62 @@ results\prompt_analysis\prompt_length_distribution.png
 results\prompt_analysis\confidence_by_prompt_id.png
 ```
 
-The analysis extracts simple NLP features:
+Phần này phân tích:
 
 ```text
-prompt word count
-prompt keyword count
-top prompt keywords
-keyword frequency
-prompt length distribution
-average classifier confidence by prompt ID
+số từ trong prompt
+số keyword
+top keyword
+tần suất keyword
+phân bố độ dài prompt
+confidence trung bình theo prompt ID
 ```
 
-This stage connects the text prompts to the generated images and model predictions. It helps answer questions such as:
+## Giai đoạn 10: Dự đoán ảnh ngoài dataset
 
-```text
-Which words appear most often in the generated image prompts?
-Are some prompt types easier for the classifier to detect as synthetic?
-How long are the prompts used to generate the synthetic dataset?
-```
-
-Only synthetic images that appear in the test split can be matched with rows from `results\predictions.csv`. The remaining generated images are still included in keyword and prompt-length analysis.
-
-Suggested demo explanation:
-
-```text
-This project also includes a simple NLP analysis of the text prompts used to generate synthetic images. The goal is to connect language prompts with image generation and classifier behavior.
-```
-
-## Stage 10: External Image Prediction
-
-This stage predicts real vs synthetic for images outside the training workflow. It is useful for a practical demo because you can test images manually selected from other folders.
-
-Predict one image:
+Dự đoán một ảnh:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png
 ```
 
-Example output:
-
-```text
-data/processed/test/synthetic/synthetic_0014.png -> synthetic (99.99%)
-```
-
-Predict all images in a folder:
+Dự đoán cả thư mục:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\processed\test\real
 ```
 
-Save predictions to CSV:
+Lưu output CSV:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\processed\test\synthetic --output-csv results\external_predictions.csv
 ```
 
-If CUDA/cuDNN has a temporary memory issue during live demo, force CPU prediction:
+Nếu CUDA/cuDNN lỗi khi demo, dùng CPU:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
 ```
 
-For a more realistic external test, create folders such as:
+## Giai đoạn 11: Grad-CAM explainability
 
-```text
-data\external_test\real
-data\external_test\synthetic
-```
+Grad-CAM giúp trực quan hóa vùng ảnh ảnh hưởng nhiều tới quyết định của classifier.
 
-Then run:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\external_test\real --output-csv results\external_real_predictions.csv
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\external_test\synthetic --output-csv results\external_synthetic_predictions.csv
-```
-
-Suggested demo explanation:
-
-```text
-Besides the fixed test set, the project can classify external images using the trained model. This makes the demo closer to a real-world use case.
-```
-
-## Stage 11: Grad-CAM Explainability
-
-This stage adds explainable AI visualization with Grad-CAM. Grad-CAM highlights the image regions that most influenced the classifier prediction.
-
-Generate Grad-CAM for a synthetic test image:
+Chạy với ảnh synthetic:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png
 ```
 
-Generate Grad-CAM for a real test image:
+Chạy với ảnh real:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\real\real_0007.jpg
 ```
 
-Outputs:
+Output:
 
 ```text
 results\gradcam\<image_name>_heatmap.png
@@ -702,47 +497,22 @@ results\gradcam\<image_name>_overlay.png
 results\gradcam\<image_name>_gradcam.json
 ```
 
-If CUDA/cuDNN has a temporary memory issue during live demo, force CPU:
+Nếu CUDA/cuDNN lỗi khi demo:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
 ```
 
-Suggested demo explanation:
+## Giai đoạn 12: Báo cáo và tài liệu portfolio
 
-```text
-Grad-CAM helps explain the classifier decision by visualizing which image regions contributed most to the real/synthetic prediction. This makes the model behavior easier to inspect instead of only showing a label and confidence score.
-```
-
-## Stage 12: Final Report and Portfolio Documentation
-
-This stage prepares the project for submission, presentation, or portfolio use.
-
-Main documents:
+Tài liệu chính:
 
 ```text
 docs\report.md
 docs\demo_checklist.md
 ```
 
-The report covers:
-
-```text
-introduction
-problem statement
-project scope
-pipeline
-dataset
-model training
-evaluation
-NLP prompt analysis
-Grad-CAM explainability
-demo application
-limitations
-future work
-```
-
-Before submission, run:
+Trước khi nộp hoặc demo, nên chạy:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
@@ -751,7 +521,7 @@ D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
 D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
 ```
 
-Recommended screenshots for presentation:
+Ảnh nên chụp cho slide:
 
 ```text
 Gradio app prediction screen
@@ -761,83 +531,58 @@ Grad-CAM overlay image
 dataset summary
 ```
 
-## Full Demo Pipeline
-
-### 1. Generate Synthetic Images
-
-Start with a small number first:
+## Pipeline demo nhanh
 
 ```cmd
-D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 20
-```
-
-For the final demo, generate more images:
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 200
-```
-
-Output:
-
-```text
-data\raw\synthetic
-```
-
-### 2. Download Real Face Images
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 200
-```
-
-Output:
-
-```text
-data\raw\real
-```
-
-### 3. Prepare Train/Validation/Test Dataset
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\prepare_dataset.py
-```
-
-Output:
-
-```text
-data\processed\train
-data\processed\val
-data\processed\test
-```
-
-### 4. Train the Classifier
-
-```cmd
-D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 5 --batch-size 16
-```
-
-Output:
-
-```text
-models\resnet18_real_vs_synthetic.pth
-```
-
-### 5. Evaluate the Model
-
-```cmd
+cd /d D:\project\stable-diffusion-data-generation
+D:\project\.venv\Scripts\python.exe src\check_environment.py
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
-```
-
-Output:
-
-```text
-results\classification_report.txt
-results\confusion_matrix.png
-```
-
-### 6. Run the Demo App
-
-```cmd
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
 
-The app lets you upload an image and predicts whether it is `real` or `synthetic`.
+Nếu còn thời gian:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+```
+
+## Đánh giá mô hình theo level
+
+Giáo viên yêu cầu đánh giá full pipeline, vì vậy dự án được đánh giá theo nhiều level:
+
+```text
+Level 1: Kiểm tra môi trường, GPU, dữ liệu, checkpoint
+Level 2: Đánh giá classifier trên test set bằng accuracy, precision, recall, F1-score
+Level 3: Đánh giá từng ảnh bằng predictions.csv và confidence
+Level 4: Đánh giá thực tế hơn bằng external prediction và Grad-CAM explainability
+```
+
+Full pipeline cần chứng minh:
+
+```text
+Prompt
+-> Stable Diffusion sinh ảnh synthetic
+-> Thu thập ảnh real
+-> Chia dataset train/val/test
+-> Train ResNet18 classifier
+-> Evaluate model
+-> Predict ảnh ngoài dataset
+-> NLP prompt analysis
+-> Grad-CAM explainability
+-> Gradio demo app
+```
+
+Lệnh kiểm tra full pipeline rút gọn:
+
+```cmd
+D:\project\.venv\Scripts\python.exe src\check_environment.py
+D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 1
+D:\project\.venv\Scripts\python.exe src\prepare_dataset.py
+D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 1 --batch-size 16
+D:\project\.venv\Scripts\python.exe src\evaluate_model.py
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\app.py
+```
