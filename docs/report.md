@@ -1,59 +1,59 @@
-# Stable Diffusion cho sinh dữ liệu ảnh khuôn mặt synthetic
+﻿# Stable Diffusion cho sinh dá»¯ liá»‡u áº£nh khuÃ´n máº·t synthetic
 
-## 1. Giới thiệu
+## 1. Giá»›i thiá»‡u
 
-Dự án này nghiên cứu cách sử dụng Stable Diffusion để sinh dữ liệu ảnh synthetic cho một bài toán Computer Vision. Bài toán được chọn là phân loại ảnh khuôn mặt thật và ảnh khuôn mặt do AI sinh ra.
+Dá»± Ã¡n nÃ y nghiÃªn cá»©u cÃ¡ch sá»­ dá»¥ng Stable Diffusion Ä‘á»ƒ sinh dá»¯ liá»‡u áº£nh synthetic cho má»™t bÃ i toÃ¡n Computer Vision. BÃ i toÃ¡n Ä‘Æ°á»£c chá»n lÃ  phÃ¢n loáº¡i áº£nh khuÃ´n máº·t tháº­t vÃ  áº£nh khuÃ´n máº·t do AI sinh ra.
 
-Trong dự án, Stable Diffusion pretrained được dùng để sinh ảnh khuôn mặt synthetic từ prompt văn bản. Sau đó, ảnh synthetic được kết hợp với ảnh khuôn mặt thật để huấn luyện mô hình ResNet18 phân loại ảnh đầu vào là `real` hay `synthetic`.
+Trong dá»± Ã¡n, Stable Diffusion pretrained Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ sinh áº£nh khuÃ´n máº·t synthetic tá»« prompt vÄƒn báº£n. Sau Ä‘Ã³, áº£nh synthetic Ä‘Æ°á»£c káº¿t há»£p vá»›i áº£nh khuÃ´n máº·t tháº­t Ä‘á»ƒ huáº¥n luyá»‡n mÃ´ hÃ¬nh ResNet18 phÃ¢n loáº¡i áº£nh Ä‘áº§u vÃ o lÃ  `real` hay `synthetic`.
 
-## 2. Bài toán
+## 2. BÃ i toÃ¡n
 
-Ảnh khuôn mặt do AI tạo ra ngày càng chân thực. Vì vậy, việc xây dựng mô hình có khả năng phân biệt ảnh thật và ảnh synthetic/AI-generated là một bài toán có tính thực tế.
+áº¢nh khuÃ´n máº·t do AI táº¡o ra ngÃ y cÃ ng chÃ¢n thá»±c. VÃ¬ váº­y, viá»‡c xÃ¢y dá»±ng mÃ´ hÃ¬nh cÃ³ kháº£ nÄƒng phÃ¢n biá»‡t áº£nh tháº­t vÃ  áº£nh synthetic/AI-generated lÃ  má»™t bÃ i toÃ¡n cÃ³ tÃ­nh thá»±c táº¿.
 
-Bài toán phân loại:
+BÃ i toÃ¡n phÃ¢n loáº¡i:
 
 ```text
-Input: một ảnh khuôn mặt
-Output: real hoặc synthetic
+Input: má»™t áº£nh khuÃ´n máº·t
+Output: real hoáº·c synthetic
 ```
 
-## 3. Phạm vi dự án
+## 3. Pháº¡m vi dá»± Ã¡n
 
-Dự án này không fine-tune Stable Diffusion. Stable Diffusion được dùng như một mô hình pretrained để sinh dữ liệu ảnh.
+Dá»± Ã¡n nÃ y khÃ´ng fine-tune Stable Diffusion. Stable Diffusion Ä‘Æ°á»£c dÃ¹ng nhÆ° má»™t mÃ´ hÃ¬nh pretrained Ä‘á»ƒ sinh dá»¯ liá»‡u áº£nh.
 
-Mô hình được train trong dự án là classifier:
+MÃ´ hÃ¬nh Ä‘Æ°á»£c train trong dá»± Ã¡n lÃ  classifier:
 
 ```text
-Stable Diffusion: mô hình pretrained dùng để sinh dữ liệu
-ResNet18: mô hình được train để phân loại real/synthetic
+Stable Diffusion: mÃ´ hÃ¬nh pretrained dÃ¹ng Ä‘á»ƒ sinh dá»¯ liá»‡u
+ResNet18: mÃ´ hÃ¬nh Ä‘Æ°á»£c train Ä‘á»ƒ phÃ¢n loáº¡i real/synthetic
 ```
 
 ## 4. Pipeline
 
 ```text
-Prompt văn bản
--> Stable Diffusion sinh ảnh khuôn mặt synthetic
--> Thu thập ảnh khuôn mặt thật từ LFW
--> Chia dữ liệu thành train/validation/test
+Prompt vÄƒn báº£n
+-> Stable Diffusion sinh áº£nh khuÃ´n máº·t synthetic
+-> Thu tháº­p áº£nh khuÃ´n máº·t tháº­t tá»« LFW
+-> Chia dá»¯ liá»‡u thÃ nh train/validation/test
 -> Train ResNet18 classifier
--> Evaluate trên test set
--> Demo bằng Gradio app
--> Phân tích prompt bằng NLP
--> Giải thích model bằng Grad-CAM
+-> Evaluate trÃªn test set
+-> Demo báº±ng Gradio app
+-> PhÃ¢n tÃ­ch prompt báº±ng NLP
+-> Giáº£i thÃ­ch model báº±ng Grad-CAM
 ```
 
 ## 5. Dataset
 
-Dataset gồm hai lớp:
+Dataset gá»“m hai lá»›p:
 
 ```text
 real
 synthetic
 ```
 
-Ảnh `real` được lấy từ LFW dataset thông qua `scikit-learn`.
+áº¢nh `real` Ä‘Æ°á»£c láº¥y tá»« LFW dataset thÃ´ng qua `scikit-learn`.
 
-Ảnh `synthetic` được sinh bằng Stable Diffusion từ nhiều prompt khác nhau. Với mỗi ảnh synthetic, dự án lưu metadata gồm:
+áº¢nh `synthetic` Ä‘Æ°á»£c sinh báº±ng Stable Diffusion tá»« nhiá»u prompt khÃ¡c nhau. Vá»›i má»—i áº£nh synthetic, dá»± Ã¡n lÆ°u metadata gá»“m:
 
 ```text
 image path
@@ -66,14 +66,14 @@ guidance scale
 model ID
 ```
 
-Trong lần chạy hiện tại:
+Trong láº§n cháº¡y hiá»‡n táº¡i:
 
 ```text
 real images: 200
-synthetic images sau khi cân bằng: 200
+synthetic images sau khi cÃ¢n báº±ng: 200
 ```
 
-Dataset được chia như sau:
+Dataset Ä‘Æ°á»£c chia nhÆ° sau:
 
 ```text
 train: 140 real, 140 synthetic
@@ -83,9 +83,9 @@ test: 30 real, 30 synthetic
 
 ## 6. Train model
 
-Classifier sử dụng kiến trúc ResNet18.
+Classifier sá»­ dá»¥ng kiáº¿n trÃºc ResNet18.
 
-Cấu hình train:
+Cáº¥u hÃ¬nh train:
 
 ```text
 model: ResNet18
@@ -97,7 +97,7 @@ default epochs: 5
 default batch size: 16
 ```
 
-Script training lưu:
+Script training lÆ°u:
 
 ```text
 best checkpoint
@@ -106,9 +106,9 @@ training history CSV
 training config JSON
 ```
 
-## 7. Đánh giá
+## 7. ÄÃ¡nh giÃ¡
 
-Script evaluation tính các chỉ số:
+Script evaluation tÃ­nh cÃ¡c chá»‰ sá»‘:
 
 ```text
 accuracy
@@ -116,57 +116,59 @@ precision
 recall
 F1-score
 confusion matrix
-confidence cho từng ảnh
+confidence cho tá»«ng áº£nh
 ```
 
-Kết quả hiện tại trên test set:
+Káº¿t quáº£ hiá»‡n táº¡i trÃªn test set:
 
 ```text
-accuracy: 1.0000
-macro precision: 1.0000
-macro recall: 1.0000
-macro F1-score: 1.0000
+accuracy: 0.9833
+macro precision: 0.9839
+macro recall: 0.9833
+macro F1-score: 0.9833
 test samples: 60
 ```
 
-Confusion matrix được lưu tại:
+Sau khi sá»­a lá»—i lÆ°u áº£nh real, káº¿t quáº£ evaluation thá»±c táº¿ hÆ¡n: model Ä‘Ãºng 59/60 áº£nh test. CÃ³ 1 áº£nh synthetic bá»‹ dá»± Ä‘oÃ¡n nháº§m thÃ nh real vá»›i confidence khoáº£ng 80.77%.
+
+Confusion matrix Ä‘Æ°á»£c lÆ°u táº¡i:
 
 ```text
 results/confusion_matrix.png
 results/confusion_matrix_normalized.png
 ```
 
-Prediction từng ảnh được lưu tại:
+Prediction tá»«ng áº£nh Ä‘Æ°á»£c lÆ°u táº¡i:
 
 ```text
 results/predictions.csv
 ```
 
-### Đánh giá theo nhiều level
+### ÄÃ¡nh giÃ¡ theo nhiá»u level
 
-Để đáp ứng yêu cầu đánh giá mô hình đầy đủ hơn, dự án có thể được đánh giá theo 4 level:
+Äá»ƒ Ä‘Ã¡p á»©ng yÃªu cáº§u Ä‘Ã¡nh giÃ¡ mÃ´ hÃ¬nh Ä‘áº§y Ä‘á»§ hÆ¡n, dá»± Ã¡n cÃ³ thá»ƒ Ä‘Æ°á»£c Ä‘Ã¡nh giÃ¡ theo 4 level:
 
-#### Level 1: Kiểm tra môi trường và dữ liệu
+#### Level 1: Kiá»ƒm tra mÃ´i trÆ°á»ng vÃ  dá»¯ liá»‡u
 
-Mục tiêu của level này là xác nhận project có thể chạy ổn định.
+Má»¥c tiÃªu cá»§a level nÃ y lÃ  xÃ¡c nháº­n project cÃ³ thá»ƒ cháº¡y á»•n Ä‘á»‹nh.
 
 ```text
-Kiểm tra Python, PyTorch, CUDA, GPU
-Kiểm tra số lượng ảnh real/synthetic
-Kiểm tra model checkpoint và output evaluation
+Kiá»ƒm tra Python, PyTorch, CUDA, GPU
+Kiá»ƒm tra sá»‘ lÆ°á»£ng áº£nh real/synthetic
+Kiá»ƒm tra model checkpoint vÃ  output evaluation
 ```
 
-Script sử dụng:
+Script sá»­ dá»¥ng:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
 ```
 
-#### Level 2: Đánh giá classifier trên test set
+#### Level 2: ÄÃ¡nh giÃ¡ classifier trÃªn test set
 
-Mục tiêu là đánh giá model trên tập test đã tách riêng.
+Má»¥c tiÃªu lÃ  Ä‘Ã¡nh giÃ¡ model trÃªn táº­p test Ä‘Ã£ tÃ¡ch riÃªng.
 
-Các metric:
+CÃ¡c metric:
 
 ```text
 accuracy
@@ -176,15 +178,15 @@ F1-score
 confusion matrix
 ```
 
-Script sử dụng:
+Script sá»­ dá»¥ng:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
 ```
 
-#### Level 3: Đánh giá từng ảnh và confidence
+#### Level 3: ÄÃ¡nh giÃ¡ tá»«ng áº£nh vÃ  confidence
 
-Mục tiêu là xem model dự đoán từng ảnh như thế nào, confidence bao nhiêu, ảnh nào đúng/sai.
+Má»¥c tiÃªu lÃ  xem model dá»± Ä‘oÃ¡n tá»«ng áº£nh nhÆ° tháº¿ nÃ o, confidence bao nhiÃªu, áº£nh nÃ o Ä‘Ãºng/sai.
 
 Output:
 
@@ -192,7 +194,7 @@ Output:
 results/predictions.csv
 ```
 
-File này chứa:
+File nÃ y chá»©a:
 
 ```text
 image_path
@@ -202,37 +204,37 @@ confidence
 correct
 ```
 
-#### Level 4: Đánh giá ngoài dataset và giải thích mô hình
+#### Level 4: ÄÃ¡nh giÃ¡ ngoÃ i dataset vÃ  giáº£i thÃ­ch mÃ´ hÃ¬nh
 
-Mục tiêu là kiểm tra model thực tế hơn bằng ảnh ngoài dataset và giải thích vùng ảnh model chú ý.
+Má»¥c tiÃªu lÃ  kiá»ƒm tra model thá»±c táº¿ hÆ¡n báº±ng áº£nh ngoÃ i dataset vÃ  giáº£i thÃ­ch vÃ¹ng áº£nh model chÃº Ã½.
 
-Script sử dụng:
+Script sá»­ dá»¥ng:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image path\to\image.jpg
 D:\project\.venv\Scripts\python.exe src\gradcam.py --image path\to\image.jpg --device cpu
 ```
 
-Level này giúp dự án không chỉ có kết quả số liệu, mà còn có khả năng demo thực tế và giải thích model.
+Level nÃ y giÃºp dá»± Ã¡n khÃ´ng chá»‰ cÃ³ káº¿t quáº£ sá»‘ liá»‡u, mÃ  cÃ²n cÃ³ kháº£ nÄƒng demo thá»±c táº¿ vÃ  giáº£i thÃ­ch model.
 
 ## 7.1 Full pipeline evaluation
 
-Dự án được đánh giá theo full pipeline, tức là kiểm tra toàn bộ luồng từ sinh dữ liệu đến demo:
+Dá»± Ã¡n Ä‘Æ°á»£c Ä‘Ã¡nh giÃ¡ theo full pipeline, tá»©c lÃ  kiá»ƒm tra toÃ n bá»™ luá»“ng tá»« sinh dá»¯ liá»‡u Ä‘áº¿n demo:
 
 ```text
-1. Kiểm tra môi trường
-2. Sinh ảnh synthetic bằng Stable Diffusion
-3. Thu thập ảnh real từ LFW
+1. Kiá»ƒm tra mÃ´i trÆ°á»ng
+2. Sinh áº£nh synthetic báº±ng Stable Diffusion
+3. Thu tháº­p áº£nh real tá»« LFW
 4. Chia dataset train/validation/test
 5. Train ResNet18 classifier
-6. Evaluate trên test set
-7. Dự đoán ảnh ngoài dataset
-8. Phân tích prompt bằng NLP
-9. Giải thích model bằng Grad-CAM
-10. Demo bằng Gradio app
+6. Evaluate trÃªn test set
+7. Dá»± Ä‘oÃ¡n áº£nh ngoÃ i dataset
+8. PhÃ¢n tÃ­ch prompt báº±ng NLP
+9. Giáº£i thÃ­ch model báº±ng Grad-CAM
+10. Demo báº±ng Gradio app
 ```
 
-Các script tương ứng:
+CÃ¡c script tÆ°Æ¡ng á»©ng:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
@@ -241,13 +243,13 @@ D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 5
 D:\project\.venv\Scripts\python.exe src\prepare_dataset.py
 D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 1 --batch-size 16
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
 
-Khi demo, không nhất thiết phải chạy lại toàn bộ pipeline với số lượng lớn. Có thể chạy bản rút gọn như sau:
+Khi demo, khÃ´ng nháº¥t thiáº¿t pháº£i cháº¡y láº¡i toÃ n bá»™ pipeline vá»›i sá»‘ lÆ°á»£ng lá»›n. CÃ³ thá»ƒ cháº¡y báº£n rÃºt gá»n nhÆ° sau:
 
 ```text
 generate_synthetic.py --count 1
@@ -258,94 +260,95 @@ prompt_analysis.py
 gradcam.py
 ```
 
-Điều quan trọng là chứng minh pipeline có thể chạy end-to-end.
+Äiá»u quan trá»ng lÃ  chá»©ng minh pipeline cÃ³ thá»ƒ cháº¡y end-to-end.
 
-## 8. Phân tích prompt bằng NLP
+## 8. PhÃ¢n tÃ­ch prompt báº±ng NLP
 
-Dự án có thêm phần phân tích ngôn ngữ tự nhiên cho các prompt dùng để sinh ảnh synthetic.
+Dá»± Ã¡n cÃ³ thÃªm pháº§n phÃ¢n tÃ­ch ngÃ´n ngá»¯ tá»± nhiÃªn cho cÃ¡c prompt dÃ¹ng Ä‘á»ƒ sinh áº£nh synthetic.
 
-Phần phân tích prompt trích xuất:
+Pháº§n phÃ¢n tÃ­ch prompt trÃ­ch xuáº¥t:
 
 ```text
-số từ trong prompt
-số keyword trong prompt
+sá»‘ tá»« trong prompt
+sá»‘ keyword trong prompt
 top keywords
-tần suất keyword
-phân bố độ dài prompt
-confidence trung bình theo prompt ID
+táº§n suáº¥t keyword
+phÃ¢n bá»‘ Ä‘á»™ dÃ i prompt
+confidence trung bÃ¬nh theo prompt ID
 ```
 
-Kết quả hiện tại:
+Káº¿t quáº£ hiá»‡n táº¡i:
 
 ```text
-synthetic prompt rows analyzed: 205
+synthetic prompt rows analyzed: 206
 unique prompts: 10
-average prompt word count: 14.11
+average prompt word count: 14.12
 top keywords: natural, background, lighting, neutral, skin
 ```
 
-Phần này giúp liên kết prompt văn bản với dữ liệu ảnh được sinh ra và hành vi của classifier.
+Pháº§n nÃ y giÃºp liÃªn káº¿t prompt vÄƒn báº£n vá»›i dá»¯ liá»‡u áº£nh Ä‘Æ°á»£c sinh ra vÃ  hÃ nh vi cá»§a classifier.
 
 ## 9. Grad-CAM Explainability
 
-Grad-CAM được dùng để trực quan hóa vùng ảnh có ảnh hưởng nhiều tới quyết định của classifier.
+Grad-CAM Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ trá»±c quan hÃ³a vÃ¹ng áº£nh cÃ³ áº£nh hÆ°á»Ÿng nhiá»u tá»›i quyáº¿t Ä‘á»‹nh cá»§a classifier.
 
-Ví dụ output:
+VÃ­ dá»¥ output:
 
 ```text
-results/gradcam/synthetic_0014_overlay.png
+results/gradcam/synthetic_0010_overlay.png
 results/gradcam/real_0007_overlay.png
 ```
 
-Nhờ Grad-CAM, dự án không chỉ đưa ra nhãn `real/synthetic`, mà còn giúp quan sát vùng ảnh model tập trung khi dự đoán.
+Nhá» Grad-CAM, dá»± Ã¡n khÃ´ng chá»‰ Ä‘Æ°a ra nhÃ£n `real/synthetic`, mÃ  cÃ²n giÃºp quan sÃ¡t vÃ¹ng áº£nh model táº­p trung khi dá»± Ä‘oÃ¡n.
 
 ## 10. Demo app
 
-Dự án có app Gradio gồm hai tab chính:
+Dá»± Ã¡n cÃ³ app Gradio gá»“m hai tab chÃ­nh:
 
 ```text
 Predict Image
 Model Results
 ```
 
-App cho phép upload ảnh và hiển thị:
+App cho phÃ©p upload áº£nh vÃ  hiá»ƒn thá»‹:
 
 ```text
-xác suất từng class
-nhãn dự đoán
+xÃ¡c suáº¥t tá»«ng class
+nhÃ£n dá»± Ä‘oÃ¡n
 confidence
 classification report
 confusion matrix
 ```
 
-Chạy app:
+Cháº¡y app:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
 
-## 11. Hạn chế
+## 11. Háº¡n cháº¿
 
-Dự án hiện là một prototype end-to-end đã chạy được, nhưng vẫn có một số hạn chế:
+Dá»± Ã¡n hiá»‡n lÃ  má»™t prototype end-to-end Ä‘Ã£ cháº¡y Ä‘Æ°á»£c, nhÆ°ng váº«n cÃ³ má»™t sá»‘ háº¡n cháº¿:
 
-- Dataset còn nhỏ.
-- Ảnh synthetic được sinh từ một mô hình Stable Diffusion.
-- Ảnh real chủ yếu lấy từ LFW.
-- Accuracy cao trên dataset demo chưa đảm bảo model tổng quát tốt trên mọi ảnh AI ngoài thực tế.
-- Classifier có thể học khác biệt đặc trưng của dataset thay vì artifact tổng quát của ảnh synthetic.
+- Dataset cÃ²n nhá».
+- áº¢nh synthetic Ä‘Æ°á»£c sinh tá»« má»™t mÃ´ hÃ¬nh Stable Diffusion.
+- áº¢nh real chá»§ yáº¿u láº¥y tá»« LFW.
+- Accuracy cao trÃªn dataset demo chÆ°a Ä‘áº£m báº£o model tá»•ng quÃ¡t tá»‘t trÃªn má»i áº£nh AI ngoÃ i thá»±c táº¿.
+- Classifier cÃ³ thá»ƒ há»c khÃ¡c biá»‡t Ä‘áº·c trÆ°ng cá»§a dataset thay vÃ¬ artifact tá»•ng quÃ¡t cá»§a áº£nh synthetic.
 
-## 12. Hướng phát triển
+## 12. HÆ°á»›ng phÃ¡t triá»ƒn
 
-Các hướng cải tiến:
+CÃ¡c hÆ°á»›ng cáº£i tiáº¿n:
 
-- Thêm nhiều dataset ảnh real hơn.
-- Sinh ảnh synthetic từ nhiều diffusion model khác nhau.
-- Test trên dataset AI-generated/deepfake bên ngoài.
-- Tăng độ đa dạng của prompt.
-- Thử backbone mạnh hơn như EfficientNet hoặc Vision Transformer.
-- Tích hợp Grad-CAM trực tiếp vào Gradio app.
-- Thử LoRA hoặc DreamBooth như phần mở rộng nâng cao của Stable Diffusion.
+- ThÃªm nhiá»u dataset áº£nh real hÆ¡n.
+- Sinh áº£nh synthetic tá»« nhiá»u diffusion model khÃ¡c nhau.
+- Test trÃªn dataset AI-generated/deepfake bÃªn ngoÃ i.
+- TÄƒng Ä‘á»™ Ä‘a dáº¡ng cá»§a prompt.
+- Thá»­ backbone máº¡nh hÆ¡n nhÆ° EfficientNet hoáº·c Vision Transformer.
+- TÃ­ch há»£p Grad-CAM trá»±c tiáº¿p vÃ o Gradio app.
+- Thá»­ LoRA hoáº·c DreamBooth nhÆ° pháº§n má»Ÿ rá»™ng nÃ¢ng cao cá»§a Stable Diffusion.
 
-## 13. Kết luận
+## 13. Káº¿t luáº­n
 
-Dự án đã xây dựng một pipeline end-to-end cho bài toán sinh dữ liệu ảnh synthetic và phát hiện ảnh AI-generated. Stable Diffusion được dùng để sinh ảnh khuôn mặt synthetic, còn ResNet18 classifier được train để phân biệt ảnh real và synthetic. Dự án cũng bổ sung NLP prompt analysis, external image prediction, Grad-CAM explainability và Gradio demo app.
+Dá»± Ã¡n Ä‘Ã£ xÃ¢y dá»±ng má»™t pipeline end-to-end cho bÃ i toÃ¡n sinh dá»¯ liá»‡u áº£nh synthetic vÃ  phÃ¡t hiá»‡n áº£nh AI-generated. Stable Diffusion Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ sinh áº£nh khuÃ´n máº·t synthetic, cÃ²n ResNet18 classifier Ä‘Æ°á»£c train Ä‘á»ƒ phÃ¢n biá»‡t áº£nh real vÃ  synthetic. Dá»± Ã¡n cÅ©ng bá»• sung NLP prompt analysis, external image prediction, Grad-CAM explainability vÃ  Gradio demo app.
+

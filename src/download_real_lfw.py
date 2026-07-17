@@ -52,9 +52,9 @@ def find_next_index(output_dir):
     return max(existing_indices) + 1
 
 
-def append_metadata(metadata_path, rows):
+def append_metadata(metadata_path, rows, replace=False):
     metadata_path.parent.mkdir(parents=True, exist_ok=True)
-    file_exists = metadata_path.exists()
+    file_exists = metadata_path.exists() and not replace
 
     fieldnames = [
         "image_path",
@@ -66,11 +66,19 @@ def append_metadata(metadata_path, rows):
         "height",
     ]
 
-    with metadata_path.open("a", newline="", encoding="utf-8") as csv_file:
+    mode = "a" if file_exists else "w"
+    with metadata_path.open(mode, newline="", encoding="utf-8") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
         writer.writerows(rows)
+
+
+def to_uint8_image(image_array):
+    if image_array.max() <= 1.0:
+        image_array = image_array * 255.0
+    image_array = image_array.clip(0, 255).astype("uint8")
+    return Image.fromarray(image_array)
 
 
 def main():
@@ -94,7 +102,7 @@ def main():
             print(f"Skipping existing file: {output_path}")
             continue
 
-        image = Image.fromarray(image_array.astype("uint8"))
+        image = to_uint8_image(image_array)
         image.save(output_path)
 
         metadata_rows.append(
@@ -110,7 +118,8 @@ def main():
         )
 
     if metadata_rows:
-        append_metadata(args.metadata_path, metadata_rows)
+        replace_metadata = args.overwrite and start_index == 1 and args.dataset_offset == 0
+        append_metadata(args.metadata_path, metadata_rows, replace=replace_metadata)
 
     print(f"Saved {len(metadata_rows)} real images to {args.output_dir}")
     print(f"Saved metadata to {args.metadata_path}")

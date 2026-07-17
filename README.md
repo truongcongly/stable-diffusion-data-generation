@@ -1,184 +1,184 @@
-# Stable Diffusion cho sinh dữ liệu ảnh khuôn mặt synthetic
+﻿# Stable Diffusion cho sinh dá»¯ liá»‡u áº£nh khuÃ´n máº·t synthetic
 
-Dự án này sử dụng Stable Diffusion để sinh ảnh khuôn mặt synthetic cho bài toán Computer Vision: phát hiện một ảnh khuôn mặt là ảnh thật hay ảnh do AI sinh ra.
+Dá»± Ã¡n nÃ y sá»­ dá»¥ng Stable Diffusion Ä‘á»ƒ sinh áº£nh khuÃ´n máº·t synthetic cho bÃ i toÃ¡n Computer Vision: phÃ¡t hiá»‡n má»™t áº£nh khuÃ´n máº·t lÃ  áº£nh tháº­t hay áº£nh do AI sinh ra.
 
-## Điểm nổi bật
+## Äiá»ƒm ná»•i báº­t
 
-- Pipeline sinh dữ liệu synthetic end-to-end bằng Stable Diffusion.
-- Classifier ResNet18 phân loại ảnh `real` và `synthetic`.
-- Evaluation với accuracy, precision, recall, F1-score, confusion matrix và confidence từng ảnh.
-- Phân tích prompt bằng NLP.
-- Dự đoán ảnh ngoài dataset.
-- Giải thích model bằng Grad-CAM.
-- Demo tương tác bằng Gradio.
+- Pipeline sinh dá»¯ liá»‡u synthetic end-to-end báº±ng Stable Diffusion.
+- Classifier ResNet18 phÃ¢n loáº¡i áº£nh `real` vÃ  `synthetic`.
+- Evaluation vá»›i accuracy, precision, recall, F1-score, confusion matrix vÃ  confidence tá»«ng áº£nh.
+- PhÃ¢n tÃ­ch prompt báº±ng NLP.
+- Dá»± Ä‘oÃ¡n áº£nh ngoÃ i dataset.
+- Giáº£i thÃ­ch model báº±ng Grad-CAM.
+- Demo tÆ°Æ¡ng tÃ¡c báº±ng Gradio.
 
-Tài liệu:
+TÃ i liá»‡u:
 
-- [Báo cáo dự án](docs/report.md)
+- [BÃ¡o cÃ¡o dá»± Ã¡n](docs/report.md)
 - [Checklist demo](docs/demo_checklist.md)
 
-## Tổng quan dự án
+## Tá»•ng quan dá»± Ã¡n
 
-Ý tưởng chính là dùng một mô hình text-to-image pretrained làm công cụ sinh dữ liệu. Stable Diffusion sinh ảnh khuôn mặt synthetic từ prompt văn bản. Các ảnh này được kết hợp với ảnh khuôn mặt thật để tạo dataset có nhãn, sau đó train classifier.
+Ã tÆ°á»Ÿng chÃ­nh lÃ  dÃ¹ng má»™t mÃ´ hÃ¬nh text-to-image pretrained lÃ m cÃ´ng cá»¥ sinh dá»¯ liá»‡u. Stable Diffusion sinh áº£nh khuÃ´n máº·t synthetic tá»« prompt vÄƒn báº£n. CÃ¡c áº£nh nÃ y Ä‘Æ°á»£c káº¿t há»£p vá»›i áº£nh khuÃ´n máº·t tháº­t Ä‘á»ƒ táº¡o dataset cÃ³ nhÃ£n, sau Ä‘Ã³ train classifier.
 
 Pipeline:
 
 ```text
-Prompt văn bản
--> Stable Diffusion sinh ảnh khuôn mặt synthetic
--> Kết hợp ảnh real và synthetic thành dataset
+Prompt vÄƒn báº£n
+-> Stable Diffusion sinh áº£nh khuÃ´n máº·t synthetic
+-> Káº¿t há»£p áº£nh real vÃ  synthetic thÃ nh dataset
 -> Train ResNet18 classifier
--> Model dự đoán real hoặc synthetic/AI-generated
--> Demo kết quả bằng Gradio app
+-> Model dá»± Ä‘oÃ¡n real hoáº·c synthetic/AI-generated
+-> Demo káº¿t quáº£ báº±ng Gradio app
 ```
 
-## Bài toán
+## BÃ i toÃ¡n
 
-Ảnh khuôn mặt do AI sinh ra ngày càng chân thực. Vì vậy, dự án tập trung vào việc xây dựng pipeline sinh dữ liệu synthetic và train model phân biệt ảnh thật với ảnh AI.
+áº¢nh khuÃ´n máº·t do AI sinh ra ngÃ y cÃ ng chÃ¢n thá»±c. VÃ¬ váº­y, dá»± Ã¡n táº­p trung vÃ o viá»‡c xÃ¢y dá»±ng pipeline sinh dá»¯ liá»‡u synthetic vÃ  train model phÃ¢n biá»‡t áº£nh tháº­t vá»›i áº£nh AI.
 
-Bài toán classification:
+BÃ i toÃ¡n classification:
 
 ```text
-Input: một ảnh khuôn mặt
-Output: real hoặc synthetic
+Input: má»™t áº£nh khuÃ´n máº·t
+Output: real hoáº·c synthetic
 ```
 
-## Phạm vi dự án
+## Pháº¡m vi dá»± Ã¡n
 
-Dự án không fine-tune Stable Diffusion. Stable Diffusion chỉ được dùng như mô hình pretrained để sinh dữ liệu ảnh.
+Dá»± Ã¡n khÃ´ng fine-tune Stable Diffusion. Stable Diffusion chá»‰ Ä‘Æ°á»£c dÃ¹ng nhÆ° mÃ´ hÃ¬nh pretrained Ä‘á»ƒ sinh dá»¯ liá»‡u áº£nh.
 
-Model được train là classifier:
+Model Ä‘Æ°á»£c train lÃ  classifier:
 
 ```text
-Stable Diffusion: dùng làm pretrained data generator
-ResNet18: model được train để phân loại real/synthetic
+Stable Diffusion: dÃ¹ng lÃ m pretrained data generator
+ResNet18: model Ä‘Æ°á»£c train Ä‘á»ƒ phÃ¢n loáº¡i real/synthetic
 ```
 
-## Mục tiêu
+## Má»¥c tiÃªu
 
-- Sinh ảnh khuôn mặt synthetic từ prompt.
-- Thu thập ảnh khuôn mặt thật.
-- Xây dựng dataset real/synthetic.
+- Sinh áº£nh khuÃ´n máº·t synthetic tá»« prompt.
+- Thu tháº­p áº£nh khuÃ´n máº·t tháº­t.
+- XÃ¢y dá»±ng dataset real/synthetic.
 - Train ResNet18 classifier.
-- Evaluate bằng accuracy, precision, recall, F1-score và confusion matrix.
-- Demo bằng Gradio app.
-- Thêm NLP prompt analysis.
-- Thêm Grad-CAM explainability.
+- Evaluate báº±ng accuracy, precision, recall, F1-score vÃ  confusion matrix.
+- Demo báº±ng Gradio app.
+- ThÃªm NLP prompt analysis.
+- ThÃªm Grad-CAM explainability.
 
-## Cách giải thích khi demo
+## CÃ¡ch giáº£i thÃ­ch khi demo
 
-Điểm quan trọng:
-
-```text
-Stable Diffusion dùng để sinh dữ liệu ảnh.
-Model được train là classifier, không phải Stable Diffusion.
-```
-
-Câu giải thích gợi ý:
+Äiá»ƒm quan trá»ng:
 
 ```text
-Dự án dùng Stable Diffusion pretrained để sinh ảnh khuôn mặt synthetic từ prompt văn bản. Sau đó, ảnh synthetic được kết hợp với ảnh real để tạo dataset. Một ResNet18 classifier được train để phân biệt ảnh thật và ảnh AI-generated.
+Stable Diffusion dÃ¹ng Ä‘á»ƒ sinh dá»¯ liá»‡u áº£nh.
+Model Ä‘Æ°á»£c train lÃ  classifier, khÃ´ng pháº£i Stable Diffusion.
 ```
 
-## Cài đặt
+CÃ¢u giáº£i thÃ­ch gá»£i Ã½:
 
-### Checklist yêu cầu
+```text
+Dá»± Ã¡n dÃ¹ng Stable Diffusion pretrained Ä‘á»ƒ sinh áº£nh khuÃ´n máº·t synthetic tá»« prompt vÄƒn báº£n. Sau Ä‘Ã³, áº£nh synthetic Ä‘Æ°á»£c káº¿t há»£p vá»›i áº£nh real Ä‘á»ƒ táº¡o dataset. Má»™t ResNet18 classifier Ä‘Æ°á»£c train Ä‘á»ƒ phÃ¢n biá»‡t áº£nh tháº­t vÃ  áº£nh AI-generated.
+```
 
-Trước khi chạy dự án, cần có:
+## CÃ i Ä‘áº·t
+
+### Checklist yÃªu cáº§u
+
+TrÆ°á»›c khi cháº¡y dá»± Ã¡n, cáº§n cÃ³:
 
 - Python 3.11
 - Git
 - NVIDIA GPU driver
 - PyTorch CUDA 12.1
-- Internet cho lần đầu tải model Stable Diffusion và LFW dataset
-- Visual Studio Code, khuyến nghị nhưng không bắt buộc
+- Internet cho láº§n Ä‘áº§u táº£i model Stable Diffusion vÃ  LFW dataset
+- Visual Studio Code, khuyáº¿n nghá»‹ nhÆ°ng khÃ´ng báº¯t buá»™c
 
-Kiểm tra Python:
+Kiá»ƒm tra Python:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe --version
 ```
 
-Kết quả mong muốn:
+Káº¿t quáº£ mong muá»‘n:
 
 ```text
 Python 3.11.x
 ```
 
-Kiểm tra PyTorch và CUDA:
+Kiá»ƒm tra PyTorch vÃ  CUDA:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 ```
 
-Kết quả mong muốn:
+Káº¿t quáº£ mong muá»‘n:
 
 ```text
 2.x.x+cu121
 True
 ```
 
-Kích hoạt virtual environment:
+KÃ­ch hoáº¡t virtual environment:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 ..\.venv\Scripts\activate
 ```
 
-Nếu không muốn activate, chạy trực tiếp bằng Python trong `.venv`:
+Náº¿u khÃ´ng muá»‘n activate, cháº¡y trá»±c tiáº¿p báº±ng Python trong `.venv`:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe
 ```
 
-Cài PyTorch CUDA:
+CÃ i PyTorch CUDA:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
 
-Cài thư viện còn lại:
+CÃ i thÆ° viá»‡n cÃ²n láº¡i:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## Kiểm tra GPU
+## Kiá»ƒm tra GPU
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_gpu.py
 ```
 
-Kết quả mong muốn:
+Káº¿t quáº£ mong muá»‘n:
 
 ```text
 CUDA available: True
 GPU: NVIDIA GeForce RTX 4060
 ```
 
-## Giai đoạn 2: Kiểm tra môi trường
+## Giai Ä‘oáº¡n 2: Kiá»ƒm tra mÃ´i trÆ°á»ng
 
-Chạy:
+Cháº¡y:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\check_environment.py
 ```
 
-Script này kiểm tra:
+Script nÃ y kiá»ƒm tra:
 
-- Phiên bản Python
-- Các package cần thiết
+- PhiÃªn báº£n Python
+- CÃ¡c package cáº§n thiáº¿t
 - PyTorch CUDA
-- Tên GPU và VRAM
-- Các thư mục project
-- Số ảnh real/synthetic
-- Model đã train và các output evaluation
+- TÃªn GPU vÃ  VRAM
+- CÃ¡c thÆ° má»¥c project
+- Sá»‘ áº£nh real/synthetic
+- Model Ä‘Ã£ train vÃ  cÃ¡c output evaluation
 
-Nếu `CUDA available` là `False`, kiểm tra driver NVIDIA, PyTorch CUDA build và thử chạy lại trong Command Prompt thường.
+Náº¿u `CUDA available` lÃ  `False`, kiá»ƒm tra driver NVIDIA, PyTorch CUDA build vÃ  thá»­ cháº¡y láº¡i trong Command Prompt thÆ°á»ng.
 
-## Sinh thử một ảnh
+## Sinh thá»­ má»™t áº£nh
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\generate_one_image.py
@@ -190,28 +190,28 @@ Output:
 data\raw\synthetic\test_face.png
 ```
 
-## Giai đoạn 3: Sinh ảnh synthetic
+## Giai Ä‘oáº¡n 3: Sinh áº£nh synthetic
 
-Chạy test nhỏ:
+Cháº¡y test nhá»:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 5
 ```
 
-Ảnh được lưu tại:
+áº¢nh Ä‘Æ°á»£c lÆ°u táº¡i:
 
 ```text
 data\raw\synthetic
 ```
 
-Metadata được lưu tại:
+Metadata Ä‘Æ°á»£c lÆ°u táº¡i:
 
 ```text
 data\metadata\synthetic_prompts.csv
 ```
 
-Metadata gồm:
+Metadata gá»“m:
 
 ```text
 image_path
@@ -227,48 +227,48 @@ guidance_scale
 model_id
 ```
 
-Sinh dataset synthetic chính:
+Sinh dataset synthetic chÃ­nh:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 200
 ```
 
-## Giai đoạn 4: Thu thập ảnh real
+## Giai Ä‘oáº¡n 4: Thu tháº­p áº£nh real
 
-Chạy test nhỏ:
+Cháº¡y test nhá»:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 5
 ```
 
-Ảnh real được lưu tại:
+áº¢nh real Ä‘Æ°á»£c lÆ°u táº¡i:
 
 ```text
 data\raw\real
 ```
 
-Metadata được lưu tại:
+Metadata Ä‘Æ°á»£c lÆ°u táº¡i:
 
 ```text
 data\metadata\real_lfw.csv
 ```
 
-Tạo dataset real 200 ảnh:
+Táº¡o dataset real 200 áº£nh:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\download_real_lfw.py --count 200
 ```
 
-Nếu tải LFW lỗi do mạng, có thể tự đặt ảnh khuôn mặt thật vào:
+Náº¿u táº£i LFW lá»—i do máº¡ng, cÃ³ thá»ƒ tá»± Ä‘áº·t áº£nh khuÃ´n máº·t tháº­t vÃ o:
 
 ```text
 data\raw\real
 ```
 
-## Giai đoạn 5: Chuẩn bị dataset
+## Giai Ä‘oáº¡n 5: Chuáº©n bá»‹ dataset
 
-Chạy:
+Cháº¡y:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
@@ -293,16 +293,16 @@ data\processed\test\real
 data\processed\test\synthetic
 ```
 
-Script cũng lưu:
+Script cÅ©ng lÆ°u:
 
 ```text
 data\metadata\dataset_split_manifest.csv
 data\metadata\dataset_summary.txt
 ```
 
-Mặc định script cân bằng dataset theo class có ít ảnh hơn để tránh model bị lệch class.
+Máº·c Ä‘á»‹nh script cÃ¢n báº±ng dataset theo class cÃ³ Ã­t áº£nh hÆ¡n Ä‘á»ƒ trÃ¡nh model bá»‹ lá»‡ch class.
 
-Tỷ lệ split mặc định:
+Tá»· lá»‡ split máº·c Ä‘á»‹nh:
 
 ```text
 train: 70%
@@ -310,9 +310,9 @@ validation: 15%
 test: 15%
 ```
 
-## Giai đoạn 6: Train classifier
+## Giai Ä‘oáº¡n 6: Train classifier
 
-Chạy:
+Cháº¡y:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
@@ -335,21 +335,21 @@ results\training_history.csv
 results\training_config.json
 ```
 
-Chạy test nhanh:
+Cháº¡y test nhanh:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 1 --batch-size 16
 ```
 
-Giải thích khi demo:
+Giáº£i thÃ­ch khi demo:
 
 ```text
-Ở giai đoạn này, ảnh synthetic và ảnh real được dùng để train ResNet18 classifier. Model học cách phân loại ảnh đầu vào là real hoặc synthetic.
+á»ž giai Ä‘oáº¡n nÃ y, áº£nh synthetic vÃ  áº£nh real Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ train ResNet18 classifier. Model há»c cÃ¡ch phÃ¢n loáº¡i áº£nh Ä‘áº§u vÃ o lÃ  real hoáº·c synthetic.
 ```
 
-## Giai đoạn 7: Evaluation
+## Giai Ä‘oáº¡n 7: Evaluation
 
-Chạy:
+Cháº¡y:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
@@ -367,7 +367,7 @@ results\confusion_matrix.png
 results\confusion_matrix_normalized.png
 ```
 
-Các chỉ số:
+CÃ¡c chá»‰ sá»‘:
 
 ```text
 accuracy
@@ -377,39 +377,39 @@ F1-score
 support
 ```
 
-## Giai đoạn 8: Gradio demo app
+## Giai Ä‘oáº¡n 8: Gradio demo app
 
-Chạy:
+Cháº¡y:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
 
-Mở URL do Gradio in ra, thường là:
+Má»Ÿ URL do Gradio in ra, thÆ°á»ng lÃ :
 
 ```text
 http://127.0.0.1:7860
 ```
 
-App gồm:
+App gá»“m:
 
 ```text
 Predict Image:
-- Upload ảnh
-- Hiển thị xác suất real/synthetic
-- Hiển thị nhãn dự đoán và confidence
+- Upload áº£nh
+- Hiá»ƒn thá»‹ xÃ¡c suáº¥t real/synthetic
+- Hiá»ƒn thá»‹ nhÃ£n dá»± Ä‘oÃ¡n vÃ  confidence
 
 Model Results:
-- Hiển thị model path và device
-- Hiển thị metrics
-- Hiển thị classification report
-- Hiển thị confusion matrix
+- Hiá»ƒn thá»‹ model path vÃ  device
+- Hiá»ƒn thá»‹ metrics
+- Hiá»ƒn thá»‹ classification report
+- Hiá»ƒn thá»‹ confusion matrix
 ```
 
-## Giai đoạn 9: NLP prompt analysis
+## Giai Ä‘oáº¡n 9: NLP prompt analysis
 
-Chạy:
+Cháº¡y:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
@@ -434,56 +434,56 @@ results\prompt_analysis\prompt_length_distribution.png
 results\prompt_analysis\confidence_by_prompt_id.png
 ```
 
-Phần này phân tích:
+Pháº§n nÃ y phÃ¢n tÃ­ch:
 
 ```text
-số từ trong prompt
-số keyword
+sá»‘ tá»« trong prompt
+sá»‘ keyword
 top keyword
-tần suất keyword
-phân bố độ dài prompt
-confidence trung bình theo prompt ID
+táº§n suáº¥t keyword
+phÃ¢n bá»‘ Ä‘á»™ dÃ i prompt
+confidence trung bÃ¬nh theo prompt ID
 ```
 
-## Giai đoạn 10: Dự đoán ảnh ngoài dataset
+## Giai Ä‘oáº¡n 10: Dá»± Ä‘oÃ¡n áº£nh ngoÃ i dataset
 
-Dự đoán một ảnh:
+Dá»± Ä‘oÃ¡n má»™t áº£nh:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0010.png
 ```
 
-Dự đoán cả thư mục:
+Dá»± Ä‘oÃ¡n cáº£ thÆ° má»¥c:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\processed\test\real
 ```
 
-Lưu output CSV:
+LÆ°u output CSV:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\predict_image.py --image-dir data\processed\test\synthetic --output-csv results\external_predictions.csv
 ```
 
-Nếu CUDA/cuDNN lỗi khi demo, dùng CPU:
+Náº¿u CUDA/cuDNN lá»—i khi demo, dÃ¹ng CPU:
 
 ```cmd
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 ```
 
-## Giai đoạn 11: Grad-CAM explainability
+## Giai Ä‘oáº¡n 11: Grad-CAM explainability
 
-Grad-CAM giúp trực quan hóa vùng ảnh ảnh hưởng nhiều tới quyết định của classifier.
+Grad-CAM giÃºp trá»±c quan hÃ³a vÃ¹ng áº£nh áº£nh hÆ°á»Ÿng nhiá»u tá»›i quyáº¿t Ä‘á»‹nh cá»§a classifier.
 
-Chạy với ảnh synthetic:
+Cháº¡y vá»›i áº£nh synthetic:
 
 ```cmd
 cd /d D:\project\stable-diffusion-data-generation
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png
 ```
 
-Chạy với ảnh real:
+Cháº¡y vá»›i áº£nh real:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\real\real_0007.jpg
@@ -497,31 +497,31 @@ results\gradcam\<image_name>_overlay.png
 results\gradcam\<image_name>_gradcam.json
 ```
 
-Nếu CUDA/cuDNN lỗi khi demo:
+Náº¿u CUDA/cuDNN lá»—i khi demo:
 
 ```cmd
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 ```
 
-## Giai đoạn 12: Báo cáo và tài liệu portfolio
+## Giai Ä‘oáº¡n 12: BÃ¡o cÃ¡o vÃ  tÃ i liá»‡u portfolio
 
-Tài liệu chính:
+TÃ i liá»‡u chÃ­nh:
 
 ```text
 docs\report.md
 docs\demo_checklist.md
 ```
 
-Trước khi nộp hoặc demo, nên chạy:
+TrÆ°á»›c khi ná»™p hoáº·c demo, nÃªn cháº¡y:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
 D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 ```
 
-Ảnh nên chụp cho slide:
+áº¢nh nÃªn chá»¥p cho slide:
 
 ```text
 Gradio app prediction screen
@@ -540,40 +540,40 @@ D:\project\.venv\Scripts\python.exe src\evaluate_model.py
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
 
-Nếu còn thời gian:
+Náº¿u cÃ²n thá»i gian:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 ```
 
-## Đánh giá mô hình theo level
+## ÄÃ¡nh giÃ¡ mÃ´ hÃ¬nh theo level
 
-Giáo viên yêu cầu đánh giá full pipeline, vì vậy dự án được đánh giá theo nhiều level:
+GiÃ¡o viÃªn yÃªu cáº§u Ä‘Ã¡nh giÃ¡ full pipeline, vÃ¬ váº­y dá»± Ã¡n Ä‘Æ°á»£c Ä‘Ã¡nh giÃ¡ theo nhiá»u level:
 
 ```text
-Level 1: Kiểm tra môi trường, GPU, dữ liệu, checkpoint
-Level 2: Đánh giá classifier trên test set bằng accuracy, precision, recall, F1-score
-Level 3: Đánh giá từng ảnh bằng predictions.csv và confidence
-Level 4: Đánh giá thực tế hơn bằng external prediction và Grad-CAM explainability
+Level 1: Kiá»ƒm tra mÃ´i trÆ°á»ng, GPU, dá»¯ liá»‡u, checkpoint
+Level 2: ÄÃ¡nh giÃ¡ classifier trÃªn test set báº±ng accuracy, precision, recall, F1-score
+Level 3: ÄÃ¡nh giÃ¡ tá»«ng áº£nh báº±ng predictions.csv vÃ  confidence
+Level 4: ÄÃ¡nh giÃ¡ thá»±c táº¿ hÆ¡n báº±ng external prediction vÃ  Grad-CAM explainability
 ```
 
-Full pipeline cần chứng minh:
+Full pipeline cáº§n chá»©ng minh:
 
 ```text
 Prompt
--> Stable Diffusion sinh ảnh synthetic
--> Thu thập ảnh real
+-> Stable Diffusion sinh áº£nh synthetic
+-> Thu tháº­p áº£nh real
 -> Chia dataset train/val/test
 -> Train ResNet18 classifier
 -> Evaluate model
--> Predict ảnh ngoài dataset
+-> Predict áº£nh ngoÃ i dataset
 -> NLP prompt analysis
 -> Grad-CAM explainability
 -> Gradio demo app
 ```
 
-Lệnh kiểm tra full pipeline rút gọn:
+Lá»‡nh kiá»ƒm tra full pipeline rÃºt gá»n:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
@@ -581,8 +581,9 @@ D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 1
 D:\project\.venv\Scripts\python.exe src\prepare_dataset.py
 D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 1 --batch-size 16
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 D:\project\.venv\Scripts\python.exe src\app.py
 ```
+

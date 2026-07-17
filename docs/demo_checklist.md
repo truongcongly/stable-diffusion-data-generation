@@ -1,14 +1,14 @@
-# Checklist demo
+﻿# Checklist demo
 
-## Trước khi demo
+## TrÆ°á»›c khi demo
 
-Chạy kiểm tra môi trường:
+Cháº¡y kiá»ƒm tra mÃ´i trÆ°á»ng:
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
 ```
 
-Kết quả mong muốn:
+Káº¿t quáº£ mong muá»‘n:
 
 ```text
 Python: 3.11.x [OK]
@@ -18,40 +18,40 @@ classification report: OK
 confusion matrix: OK
 ```
 
-## Thứ tự demo
+## Thá»© tá»± demo
 
-1. Giải thích phạm vi dự án.
+1. Giáº£i thÃ­ch pháº¡m vi dá»± Ã¡n.
 
 ```text
-Stable Diffusion dùng để sinh dữ liệu ảnh.
-Model được train là ResNet18 classifier.
+Stable Diffusion dÃ¹ng Ä‘á»ƒ sinh dá»¯ liá»‡u áº£nh.
+Model Ä‘Æ°á»£c train lÃ  ResNet18 classifier.
 ```
 
-2. Demo sinh ảnh synthetic.
+2. Demo sinh áº£nh synthetic.
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\generate_synthetic.py --count 1
 ```
 
-3. Mở file thống kê dataset.
+3. Má»Ÿ file thá»‘ng kÃª dataset.
 
 ```text
 data\metadata\dataset_summary.txt
 ```
 
-4. Giải thích lệnh train.
+4. Giáº£i thÃ­ch lá»‡nh train.
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\train_model.py --epochs 5 --batch-size 16
 ```
 
-5. Chạy hoặc mở kết quả evaluation.
+5. Cháº¡y hoáº·c má»Ÿ káº¿t quáº£ evaluation.
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
 ```
 
-6. Chạy Gradio app.
+6. Cháº¡y Gradio app.
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\app.py
@@ -66,87 +66,88 @@ D:\project\.venv\Scripts\python.exe src\prompt_analysis.py
 8. Demo Grad-CAM.
 
 ```cmd
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 ```
 
-## Đánh giá mô hình theo level
+## ÄÃ¡nh giÃ¡ mÃ´ hÃ¬nh theo level
 
-Khi giáo viên hỏi về đánh giá mô hình, trình bày theo 4 level:
+Khi giÃ¡o viÃªn há»i vá» Ä‘Ã¡nh giÃ¡ mÃ´ hÃ¬nh, trÃ¬nh bÃ y theo 4 level:
 
-### Level 1: Kiểm tra môi trường và dữ liệu
+### Level 1: Kiá»ƒm tra mÃ´i trÆ°á»ng vÃ  dá»¯ liá»‡u
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\check_environment.py
 ```
 
-Nói:
+NÃ³i:
 
 ```text
-Level này kiểm tra Python, CUDA, GPU, package, số lượng ảnh real/synthetic, checkpoint và output evaluation.
+Level nÃ y kiá»ƒm tra Python, CUDA, GPU, package, sá»‘ lÆ°á»£ng áº£nh real/synthetic, checkpoint vÃ  output evaluation.
 ```
 
-### Level 2: Đánh giá classifier trên test set
+### Level 2: ÄÃ¡nh giÃ¡ classifier trÃªn test set
 
 ```cmd
 D:\project\.venv\Scripts\python.exe src\evaluate_model.py
 ```
 
-Nói:
+NÃ³i:
 
 ```text
-Level này đánh giá bằng accuracy, precision, recall, F1-score và confusion matrix.
+Level nÃ y Ä‘Ã¡nh giÃ¡ báº±ng accuracy, precision, recall, F1-score vÃ  confusion matrix.
 ```
 
-### Level 3: Đánh giá từng ảnh
+### Level 3: ÄÃ¡nh giÃ¡ tá»«ng áº£nh
 
-Mở file:
+Má»Ÿ file:
 
 ```text
 results\predictions.csv
 ```
 
-Nói:
+NÃ³i:
 
 ```text
-File này lưu true label, predicted label, confidence và correct/incorrect cho từng ảnh test.
+File nÃ y lÆ°u true label, predicted label, confidence vÃ  correct/incorrect cho tá»«ng áº£nh test.
 ```
 
-### Level 4: Đánh giá ngoài dataset và giải thích model
+### Level 4: ÄÃ¡nh giÃ¡ ngoÃ i dataset vÃ  giáº£i thÃ­ch model
 
 ```cmd
-D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
-D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0014.png --device cpu
+D:\project\.venv\Scripts\python.exe src\predict_image.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
+D:\project\.venv\Scripts\python.exe src\gradcam.py --image data\processed\test\synthetic\synthetic_0010.png --device cpu
 ```
 
-Nói:
+NÃ³i:
 
 ```text
-Level này kiểm tra khả năng dự đoán ảnh bất kỳ và dùng Grad-CAM để giải thích vùng ảnh model chú ý.
+Level nÃ y kiá»ƒm tra kháº£ nÄƒng dá»± Ä‘oÃ¡n áº£nh báº¥t ká»³ vÃ  dÃ¹ng Grad-CAM Ä‘á»ƒ giáº£i thÃ­ch vÃ¹ng áº£nh model chÃº Ã½.
 ```
 
-## Full pipeline cần trình bày
+## Full pipeline cáº§n trÃ¬nh bÃ y
 
 ```text
 Prompt
--> Stable Diffusion sinh ảnh synthetic
--> Thu thập ảnh real
+-> Stable Diffusion sinh áº£nh synthetic
+-> Thu tháº­p áº£nh real
 -> Chia dataset train/validation/test
 -> Train ResNet18 classifier
 -> Evaluate model
--> Dự đoán ảnh ngoài dataset
+-> Dá»± Ä‘oÃ¡n áº£nh ngoÃ i dataset
 -> NLP prompt analysis
 -> Grad-CAM explainability
 -> Gradio demo app
 ```
 
-## Câu giải thích chính
+## CÃ¢u giáº£i thÃ­ch chÃ­nh
 
 ```text
-Dự án dùng Stable Diffusion để sinh ảnh khuôn mặt synthetic. Sau đó, ảnh synthetic được kết hợp với ảnh real để train ResNet18 classifier phát hiện ảnh thật và ảnh AI-generated. Dự án cũng có phân tích prompt bằng NLP và giải thích model bằng Grad-CAM.
+Dá»± Ã¡n dÃ¹ng Stable Diffusion Ä‘á»ƒ sinh áº£nh khuÃ´n máº·t synthetic. Sau Ä‘Ã³, áº£nh synthetic Ä‘Æ°á»£c káº¿t há»£p vá»›i áº£nh real Ä‘á»ƒ train ResNet18 classifier phÃ¡t hiá»‡n áº£nh tháº­t vÃ  áº£nh AI-generated. Dá»± Ã¡n cÅ©ng cÃ³ phÃ¢n tÃ­ch prompt báº±ng NLP vÃ  giáº£i thÃ­ch model báº±ng Grad-CAM.
 ```
 
-## Hạn chế cần nói khi demo
+## Háº¡n cháº¿ cáº§n nÃ³i khi demo
 
 ```text
-Accuracy hiện tại cao trên dataset demo, nhưng dataset còn nhỏ và cần test thêm trên dữ liệu đa dạng hơn trước khi kết luận khả năng tổng quát ngoài thực tế.
+Accuracy hiá»‡n táº¡i cao trÃªn dataset demo, nhÆ°ng dataset cÃ²n nhá» vÃ  cáº§n test thÃªm trÃªn dá»¯ liá»‡u Ä‘a dáº¡ng hÆ¡n trÆ°á»›c khi káº¿t luáº­n kháº£ nÄƒng tá»•ng quÃ¡t ngoÃ i thá»±c táº¿.
 ```
+
