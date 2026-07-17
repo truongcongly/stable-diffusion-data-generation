@@ -1,0 +1,16 @@
+metric,value
+raw_real_images,5000
+raw_synthetic_images,498
+train_real_images,348
+train_synthetic_images,348
+val_real_images,74
+val_synthetic_images,74
+test_real_images,76
+test_synthetic_images,76
+accuracy,1.0
+macro_precision,1.0
+macro_recall,1.0
+macro_f1,1.0
+confusion_matrix,results/confusion_matrix.png
+gradcam_examples,results/gradcam/app/gradcam_20260717_070254_overlay.png; results/gradcam/app/gradcam_20260717_070254_heatmap.png; results/gradcam/app/gradcam_20260717_070241_overlay.png; results/gradcam/app/gradcam_20260717_070241_heatmap.png
+generated_examples,
